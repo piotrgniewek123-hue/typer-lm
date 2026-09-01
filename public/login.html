@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Typer LM - Logowanie</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height: 100vh;">
+    <div class="card bg-secondary text-white p-4" style="width: 350px;">
+        <h3 class="text-center mb-3">Typer LM</h3>
+        <form action="/login" method="POST">
+            <div class="mb-3">
+                <label class="form-label">Nick / Login</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Hasło</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-2">Zaloguj się</button>
+        </form>
+        <hr>
+        <form action="/register" method="POST">
+            <h5 class="text-center">Nowe konto</h5>
+            <div class="mb-2">
+                <input type="text" name="username" placeholder="Nick" class="form-control" required>
+            </div>
+            <div class="mb-2">
+                <input type="password" name="password" placeholder="Hasło" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-outline-light w-100">Zarejestruj się</button>
+        </form>
+    </div>
+</body>
+</html>

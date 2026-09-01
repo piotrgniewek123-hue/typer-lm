@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Typer LM - Panel Główny</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-white p-4">
+    <div class="container" style="max-width: 900px;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Cześć, <span id="username-display"></span>! 👋</h2>
+            <a href="/logout" class="btn btn-outline-danger btn-sm">Wyloguj się</a>
+        </div>
+
+        <!-- Typy Długoterminowe -->
+        <div class="card bg-secondary text-white mb-4 p-3">
+            <h4>Bonusy (Przed fazą ligową)</h4>
+            <form action="/save-bonus" method="POST" class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label">Król Strzelców:</label>
+                    <input type="text" name="top_scorer" class="form-control" placeholder="np. Kylian Mbappé" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Zwycięzca LM:</label>
+                    <select name="winner" class="form-select" required>
+                        <option value="" disabled selected>-- Wybierz drużynę --</option>
+                        <option value="AC Milan">AC Milan</option>
+                        <option value="AEK Ateny">AEK Ateny</option>
+                        <option value="Arsenal FC">Arsenal FC</option>
+                        <option value="AS Monaco">AS Monaco</option>
+                        <option value="AS Roma">AS Roma</option>
+                        <option value="Aston Villa">Aston Villa</option>
+                        <option value="Atalanta BC">Atalanta BC</option>
+                        <option value="Atletico Madryt">Atletico Madryt</option>
+                        <option value="Bayer Leverkusen">Bayer Leverkusen</option>
+                        <option value="Bayern Monachium">Bayern Monachium</option>
+                        <option value="Benfica Lizbona">Benfica Lizbona</option>
+                        <option value="Bologna FC">Bologna FC</option>
+                        <option value="Borussia Dortmund">Borussia Dortmund</option>
+                        <option value="Brest">Brest</option>
+                        <option value="Celtic Glasgow">Celtic Glasgow</option>
+                        <option value="Club Brugge">Club Brugge</option>
+                        <option value="Como 1907">Como 1907</option>
+                        <option value="Crvena Zvezda">Crvena Zvezda</option>
+                        <option value="Dinamo Zagrzeb">Dinamo Zagrzeb</option>
+                        <option value="FC Barcelona">FC Barcelona</option>
+                        <option value="FC Porto">FC Porto</option>
+                        <option value="Fenerbahce SK">Fenerbahce SK</option>
+                        <option value="Feyenoord">Feyenoord</option>
+                        <option value="FK Bodo/Glimt">FK Bodo/Glimt</option>
+                        <option value="Galatasaray SK">Galatasaray SK</option>
+                        <option value="Girona FC">Girona FC</option>
+                        <option value="Inter Mediolan">Inter Mediolan</option>
+                        <option value="Juventus Turin">Juventus Turin</option>
+                        <option value="LASK Linz">LASK Linz</option>
+                        <option value="Liverpool FC">Liverpool FC</option>
+                        <option value="LOSC Lille">LOSC Lille</option>
+                        <option value="Manchester City">Manchester City</option>
+                        <option value="Manchester United">Manchester United</option>
+                        <option value="Olympiakos Piraeus">Olympiakos Piraeus</option>
+                        <option value="PSV Eindhoven">PSV Eindhoven</option>
+                        <option value="PSG">PSG</option>
+                        <option value="RB Lipsk">RB Lipsk</option>
+                        <option value="RC Lens">RC Lens</option>
+                        <option value="Real Betis">Real Betis</option>
+                        <option value="Real Madryt">Real Madryt</option>
+                        <option value="Red Bull Salzburg">Red Bull Salzburg</option>
+                        <option value="Sabah Baku">Sabah Baku</option>
+                        <option value="Shakhtar Donieck">Shakhtar Donieck</option>
+                        <option value="Slavia Praga">Slavia Praga</option>
+                        <option value="Slovan Bratysława">Slovan Bratysława</option>
+                        <option value="Sparta Praga">Sparta Praga</option>
+                        <option value="Sporting CP">Sporting CP</option>
+                        <option value="SSC Napoli">SSC Napoli</option>
+                        <option value="Sturm Graz">Sturm Graz</option>
+                        <option value="VfB Stuttgart">VfB Stuttgart</option>
+                        <option value="Viking FK">Viking FK</option>
+                        <option value="Villarreal CF">Villarreal CF</option>
+                        <option value="Young Boys">Young Boys</option>
+                    </select>
+                </div>
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-warning btn-sm w-100">Zapisz typy długoterminowe</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Terminarz z podziałem na daty -->
+        <h4>Mecze do obstawienia</h4>
+        <div class="mb-3">
+            <label class="form-label text-muted">Wybierz dzień rozgrywek:</label>
+            <div id="date-tabs" class="d-flex gap-2 flex-wrap"></div>
+        </div>
+
+        <div id="matches-list" class="mb-4"></div>
+
+        <!-- Tabela graczy -->
+        <h4>Tabela Graczy</h4>
+        <div class="card bg-secondary text-white p-3 mb-4">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Miejsce</th>
+                        <th>Gracz</th>
+                        <th>Punkty</th>
+                        <th>Typ: Król</th>
+                        <th>Typ: Mistrz</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard"></tbody>
+            </table>
+        </div>
+
+        <!-- Panel Admina -->
+        <div class="card bg-danger text-white p-3 mb-4">
+            <h5>Panel Admina (Symulacja wyników)</h5>
+            <form action="/admin/set-result" method="POST" class="row g-2">
+                <div class="col-md-5">
+                    <select name="match_id" id="admin-match-select" class="form-select"></select>
+                </div>
+                <div class="col-md-2"><input type="number" name="home_score" placeholder="Gole Gospodarzy" class="form-control" required></div>
+                <div class="col-md-2"><input type="number" name="away_score" placeholder="Gole Gości" class="form-control" required></div>
+                <div class="col-md-3"><button type="submit" class="btn btn-light w-100">Zakończ mecz</button></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let globalMatches = [];
+        let globalMyBets = [];
+
+        fetch('/api/data')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('username-display').innerText = data.username;
+                globalMatches = data.matches;
+                globalMyBets = data.myBets;
+
+                // Select admina
+                const adminSelect = document.getElementById('admin-match-select');
+                data.matches.forEach(m => {
+                    adminSelect.innerHTML += `<option value="${m.id}">${m.home_team} vs ${m.away_team} (${m.match_date})</option>`;
+                });
+
+                // Unikalne daty
+                const uniqueDates = [...new Set(data.matches.map(m => m.match_date.split(' ')[0]))].sort();
+                
+                const tabsDiv = document.getElementById('date-tabs');
+                uniqueDates.forEach((date, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = `btn btn-sm ${index === 0 ? 'btn-primary' : 'btn-outline-light'}`;
+                    btn.innerText = date;
+                    btn.onclick = () => {
+                        document.querySelectorAll('#date-tabs button').forEach(b => b.className = 'btn btn-sm btn-outline-light');
+                        btn.className = 'btn btn-sm btn-primary';
+                        renderMatchesForDate(date);
+                    };
+                    tabsDiv.appendChild(btn);
+                });
+
+                if (uniqueDates.length > 0) {
+                    renderMatchesForDate(uniqueDates[0]);
+                }
+
+                const board = document.getElementById('leaderboard');
+                data.users.forEach((u, index) => {
+                    board.innerHTML += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${u.username}</td>
+                            <td><strong>${u.points} pkt</strong></td>
+                            <td>${u.top_scorer || '-'}</td>
+                            <td>${u.winner || '-'}</td>
+                        </tr>`;
+                });
+            });
+
+        function renderMatchesForDate(selectedDate) {
+            const matchesDiv = document.getElementById('matches-list');
+            matchesDiv.innerHTML = '';
+
+            const filteredMatches = globalMatches.filter(m => m.match_date.startsWith(selectedDate));
+
+            filteredMatches.forEach(m => {
+                const myBet = globalMyBets.find(b => b.match_id === m.id);
+                const betH = myBet ? myBet.pred_home : '';
+                const betA = myBet ? myBet.pred_away : '';
+                
+                const status = m.is_finished ? 
+                    `<span class="badge bg-success">Zakończony (${m.home_score}:${m.away_score})</span>` : 
+                    `<span class="badge bg-warning text-dark">Godzina: ${m.match_date.split(' ')[1]}</span>`;
+
+                matchesDiv.innerHTML += `
+                    <div class="card bg-secondary text-white p-3 mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>${m.home_team} vs ${m.away_team}</strong><br>
+                                <small>${status}</small>
+                            </div>
+                            ${!m.is_finished ? `
+                            <form action="/submit-bet" method="POST" class="d-flex gap-2">
+                                <input type="hidden" name="match_id" value="${m.id}">
+                                <input type="number" name="home_score" value="${betH}" class="form-control text-center" style="width:60px;" min="0" required>
+                                <span>:</span>
+                                <input type="number" name="away_score" value="${betA}" class="form-control text-center" style="width:60px;" min="0" required>
+                                <button class="btn btn-primary btn-sm">Zapisz</button>
+                            </form>` : `<span class="fw-bold fs-5">${m.home_score} : ${m.away_score}</span>`}
+                        </div>
+                    </div>`;
+            });
+        }
+    </script>
+</body>
+</html>
